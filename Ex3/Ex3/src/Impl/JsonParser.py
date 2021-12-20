@@ -9,8 +9,13 @@ class JsonParser:
     def __init__(self, filename):
         self.filename = filename
 
-    def parse(self, graph):
-        pass
+    def save(self, graph):
+        parsed = {"Nodes": [], "Edges": []}
+        for v in graph.get_all_v().values():
+            parsed["Nodes"].append(v.dump())
+            parsed["Edges"].append([{"dest": v.id, "src": k, "w": w} for k, w in graph.all_in_edges_of_node(v.id).items()])
+        with open(self.filename, "w+") as f:
+            f.write(json.dumps(parsed, indent=4, sort_keys=True))
 
     def load(self):
         with open(self.filename, "r") as f:
@@ -20,8 +25,4 @@ class JsonParser:
 
 j = JsonParser("/Users/ofirrubin/PycharmProjects/OOP_Ex3/Ex3/Ex3/src/data/A5_edited")
 g = j.load()
-g.add_node(1, (0, 2, 3))
-g.add_node(2, (1, 2, 3))
-g.add_edge(1, 2, 3.5)
-g.add_edge(2, 1, 2)
-g.remove_edge(2, 1)
+
