@@ -17,13 +17,12 @@ class DiGraph(GraphInterface):
 
     def node_parser(self, nodes):
         for n in nodes:
-            self.nodes[n["id"]] = Node(**n)
+            self.add_node(n["id"], n["pos"])
 
     def edge_parser(self, edges):
         for e in edges:
             edg = Edge(**e)
-            self.edges[e["src"]][e["dest"]] = edg
-            self.inverse[e["dest"]][e["src"]] = edg.w
+            self.add_edge(edg.src, edg.dest, edg.w)
 
     def v_size(self) -> int:
         return len(self.nodes)
@@ -46,6 +45,8 @@ class DiGraph(GraphInterface):
             return False
         else:
             self.nodes[node_id] = Node(node_id, pos)
+            self.edges[node_id] = {}
+            self.inverse[node_id] = {}
             return True
 
     def remove_node(self, node_id: int) -> bool:
@@ -68,4 +69,4 @@ class DiGraph(GraphInterface):
         return self.inverse[id1]
 
     def all_out_edges_of_node(self, id1: int) -> dict:
-        pass
+        return {k: v.weight for k, v in self.edges[id1]}

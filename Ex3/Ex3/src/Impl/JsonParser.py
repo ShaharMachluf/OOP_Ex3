@@ -19,4 +19,9 @@ class JsonParser:
 
 
 j = JsonParser("/Users/ofirrubin/PycharmProjects/OOP_Ex3/Ex3/Ex3/src/data/A5_edited")
-print(j.load().edges)
+g = j.load()
+g.add_node(1, (0, 2, 3))
+g.add_node(2, (1, 2, 3))
+g.add_edge(1, 2, 3.5)
+g.add_edge(2, 1, 2)
+g.remove_edge(2, 1)
