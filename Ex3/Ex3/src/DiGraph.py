@@ -6,7 +6,7 @@ from Impl.Node import Node
 class DiGraph(GraphInterface):
    # dict [src] => dict<dest, edge>
    # dict [dest] => dict<src, edge> src =1 => dict<5, edge>,6,9] | dest =9 [1,2]
-    def __init__(self, Nodes, Edges):
+    def __init__(self, Nodes = None, Edges = None):
         self.nodes = {}
         self.edges = {}  # dict[src] of (dict[dest] of edges)
         self.inverse = {}  # dict[dest] of (dict[src] of None)
@@ -80,4 +80,8 @@ class DiGraph(GraphInterface):
 
     def is_edge(self, id1, id2):
         return id2 in self.edges[id1].keys()
+
+    def get_edge(self, id1, id2):
+        return self.edges[id1][id2]
+
 
