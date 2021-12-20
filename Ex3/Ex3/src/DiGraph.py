@@ -4,14 +4,18 @@ from Impl.Node import Node
 
 
 class DiGraph(GraphInterface):
-    def __init__(self, Nodes=None, Edges=None):
+   # dict [src] => dict<dest, edge>
+   # dict [dest] => dict<src, edge> src =1 => dict<5, edge>,6,9] | dest =9 [1,2]
+    def __init__(self, Nodes, Edges):
         self.nodes = {}
         self.edges = {}  # dict[src] of (dict[dest] of edges)
         self.inverse = {}  # dict[dest] of (dict[src] of None)
         self.mc = 0
-
-        self.node_parser(Nodes)
-        self.edge_parser(Edges)
+        self.edge_count = 0
+        if Nodes is not None:
+            self.node_parser(Nodes)
+        if Edges is not None:
+            self.edge_parser(Edges)
 
     def node_parser(self, nodes):
         for n in nodes:
@@ -26,7 +30,7 @@ class DiGraph(GraphInterface):
         return len(self.nodes)
 
     def e_size(self) -> int:
-        return len(self.edges)
+        return self.edge_count
 
     def get_mc(self) -> int:
         return self.mc
@@ -35,6 +39,8 @@ class DiGraph(GraphInterface):
         if id1 in self.nodes and id2 in self.nodes:
             self.edges[id1][id2] = Edge(id1, id2, weight)
             self.inverse[id2][id1] = weight
+            self.mc += 1
+            self.edge_count += 1
             return True
         return False
 
@@ -45,6 +51,7 @@ class DiGraph(GraphInterface):
             self.nodes[node_id] = Node(node_id, pos)
             self.edges[node_id] = {}
             self.inverse[node_id] = {}
+            self.mc += 1
             return True
 
     def remove_node(self, node_id: int) -> bool:
@@ -53,12 +60,14 @@ class DiGraph(GraphInterface):
                 self.inverse[dest].pop(node_id)
             self.nodes.pop(node_id)
             self.edges.pop(node_id)
+            self.mc += 1
             return True
         return False
 
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
         self.edges[node_id1].pop(node_id2)
         self.inverse[node_id2].pop(node_id1)
+        self.edge_count -= 1
 
     def get_all_v(self) -> dict:
         return self.nodes
@@ -68,3 +77,7 @@ class DiGraph(GraphInterface):
 
     def all_out_edges_of_node(self, id1: int) -> dict:
         return {k: v.weight for k, v in self.edges[id1]}
+
+    def is_edge(self, id1, id2):
+        return id2 in self.edges[id1].keys()
+
