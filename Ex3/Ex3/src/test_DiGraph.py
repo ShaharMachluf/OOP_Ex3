@@ -61,4 +61,4 @@ class TestDiGraph(unittest.TestCase):
 
 
     def test_all_out_edges_of_node(self):
-        self.assertEquals(g.all_out_edges_of_node(1), g.all_out_edges_of_node(1))
+        self.assertEquals(g.edges[1], g.all_out_edges_of_node(1))
