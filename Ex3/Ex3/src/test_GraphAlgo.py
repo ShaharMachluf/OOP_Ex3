@@ -20,7 +20,8 @@ class test_GraphAlgo(unittest.TestCase):
 
     def test_shortest_path(self):
         a.load_from_json("C:/Users/shaha/PycharmProjects/OOP_Ex3/Ex3/Ex3/data/A0.json")
-
+        y = a.shortest_path(0, 3)
+        print(y)
 
     def test_tsp(self):
         assert False
