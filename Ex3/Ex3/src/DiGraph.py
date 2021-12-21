@@ -37,7 +37,7 @@ class DiGraph(GraphInterface):
 
     def add_edge(self, id1: int, id2: int, weight: float) -> bool:
         if id1 in self.nodes.keys() and id2 in self.nodes.keys():
-            self.edges[id1][id2] = weight
+            self.edges[id1][id2] = Edge(id1, id2, weight)
             self.inverse[id2][id1] = weight
             self.mc += 1
             self.edge_count += 1
@@ -80,7 +80,8 @@ class DiGraph(GraphInterface):
         return self.inverse[id1]
 
     def all_out_edges_of_node(self, id1: int) -> dict:
-        return self.edges[id1]
+        if isinstance (self.edges[id1], dict):
+            return {k: v.weight for k, v in self.edges[id1]}
 
     def is_edge(self, id1, id2):
         return id2 in self.edges[id1].keys()
