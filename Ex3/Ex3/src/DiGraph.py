@@ -80,11 +80,14 @@ class DiGraph(GraphInterface):
         return self.inverse[id1]
 
     def all_out_edges_of_node(self, id1: int) -> dict:
-        if isinstance (self.edges[id1], dict):
+        if isinstance(self.edges[id1], dict):
             return {k: v.weight for k, v in self.edges[id1]}
 
     def is_edge(self, id1, id2):
         return id2 in self.edges[id1].keys()
+
+    def get_edge(self, id1, id2):
+        return self.edges[id1][id2]
 
     def get_edge(self, id1, id2):
         return self.edges[id1][id2]
