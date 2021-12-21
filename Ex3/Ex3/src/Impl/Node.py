@@ -1,6 +1,9 @@
 
 class Node:
     def __init__(self, id, pos):
+        self.d = 0
+        self.pi = -1
+        self.visited = False
         self.id = id
         if type(pos) is tuple:
             self.pos = pos

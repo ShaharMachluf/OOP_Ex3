@@ -1,8 +1,7 @@
 import json
 
 from DiGraph import DiGraph
-from Edge import Edge
-from Node import Node
+# from Node import Node
 
 
 class JsonParser:
@@ -23,6 +22,6 @@ class JsonParser:
             return DiGraph(**js)
 
 
-j = JsonParser("/Users/ofirrubin/PycharmProjects/OOP_Ex3/Ex3/Ex3/src/data/A5_edited")
-g = j.load()
+# j = JsonParser("/Users/ofirrubin/PycharmProjects/OOP_Ex3/Ex3/Ex3/src/data/A5_edited")
+# g = j.load()
 

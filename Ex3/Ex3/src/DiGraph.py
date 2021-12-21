@@ -1,5 +1,4 @@
 from GraphInterface import GraphInterface
-from Impl.Edge import Edge
 from Impl.Node import Node
 
 
@@ -23,8 +22,7 @@ class DiGraph(GraphInterface):
 
     def edge_parser(self, edges):
         for e in edges:
-            edg = Edge(**e)
-            self.add_edge(edg.src, edg.dest, edg.w)
+            self.add_edge(e["src"], e["dest"], e["w"])
 
     def v_size(self) -> int:
         return len(self.nodes)
@@ -87,5 +85,9 @@ class DiGraph(GraphInterface):
 
     def get_edge(self, id1, id2):
         return self.edges[id1][id2]
+
+    def get_weight(self, id1: int, id2: int) -> (float, list):
+        if self.graph.is_edge(id1, id2) is True:
+            return self.graph.get_edge(id1, id2)
 
 
