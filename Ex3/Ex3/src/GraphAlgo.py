@@ -27,10 +27,9 @@ class GraphAlgo(GraphAlgoInterface):
 
     def build_path(self, src, dest, prvs):
         nds = []
-        # v = self.graph.nodes[dest]
-        v = dest #v.d
+        v = dest
         while v != src:
-            nds.insert(0, v) #v.id)
+            nds.insert(0, v)
             v = prvs[v]
         nds.insert(0, src)
         return self.graph.nodes[dest].d, nds
@@ -40,7 +39,7 @@ class GraphAlgo(GraphAlgoInterface):
             q.remove((v.d, v))
             v.d = u.d + w
             heapq.heappush(q, (self.sort_by(v), v))
-            parents[v] = u
+            parents[v.id] = u.id
             # v.pi = u
 
     def shortest_path_pointer(self, src, dest):
@@ -49,33 +48,82 @@ class GraphAlgo(GraphAlgoInterface):
         q = [(0.0, self.graph.nodes[src])]
         visited = []
         parents = {}
-        # self.graph.nodes[src].visited = True
         visited.append(src)
         while len(q) != 0:
             u = heapq.heappop(q)[1]
-            if u.id == dest:
-                return parents
             for v, w in self.graph.all_out_edges_of_node(u.id).items():
                 node = self.graph.nodes[v]
-                #if not node.visited:
                 if v not in visited:
                     node.d = float("inf")
                     heapq.heappush(q, (self.sort_by(node), node))
-                    # node.visited = True
                     visited.append(v)
                     self.relax(u, node, w, q, parents)
+                    if v == dest:
+                        return parents
         return None
 
+    def sp(self, src, dest=None):
+        if src not in self.graph.nodes.keys():
+            return None
+        if dest is not None and dest not in self.graph.nodes.keys():
+            return None
+
+        self.graph.nodes[src].d = 0
+        q = [(0.0, self.graph.nodes[src])]
+        visited = []
+        parents = {}
+        visited.append(src)
+        last = None
+        while len(q) != 0:
+            u = heapq.heappop(q)[1]
+            for v, w in self.graph.all_out_edges_of_node(u.id).items():
+                node = self.graph.nodes[v]
+                if v not in visited:
+                    node.d = float("inf")
+                    heapq.heappush(q, (self.sort_by(node), node))
+                    visited.append(v)
+                    self.relax(u, node, w, q, parents)
+                    if dest is None and self.graph.nodes[last].d < self.graph.nodes[v]:
+                        last = v
+                    if v == dest:
+                        return parents
+        return self.graph.nodes[last] if dest is None else None
 
     def shortest_path(self, src, dest):
-        prvs = self.shortest_path_pointer(src, dest)
+        prvs = self.sp(src, dest)
         return self.build_path(src, dest, prvs) if prvs is not None else None
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         pass
 
     def centerPoint(self) -> (int, float):
-        pass
+        # min_n = None
+        # min_dist = float("inf")
+        # for n in self.graph.get_all_v():
+        #     d = self.sp(n).d
+        #     if d <= min_dist:
+        #         min_dist = d
+        #         min_n = n
+        # return min_n, min_dist
+
+        distances = {}
+        for n in self.graph.get_all_v():
+            distances[n] = 0
+            for n2 in self.graph.get_all_v():
+                if n == n2:
+                    continue
+                d = self.shortest_path(n, n2)
+                if d is None:
+                    return "The graph is not connected"
+                else:
+                    distances[n] = max(distances[n], d[0])
+        node = None
+        dist = float("inf")
+        for n in distances:
+            if distances[n] <= dist:
+                node = n
+                dist = distances[n]
+        return node, dist
 
     def plot_graph(self) -> None:
         pass

@@ -22,6 +22,6 @@ class JsonParser:
             return DiGraph(**js)
 
 
-# j = JsonParser("/Users/ofirrubin/PycharmProjects/OOP_Ex3/Ex3/Ex3/src/data/A5_edited")
+# j = JsonParser("/Users/ofirrubin/PycharmProjects/OOP_Ex3/Ex3/Ex3/src/old data/A5_edited")
 # g = j.load()
 
