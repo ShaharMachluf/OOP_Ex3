@@ -24,7 +24,9 @@ class test_GraphAlgo(unittest.TestCase):
         self.assertEquals(a.shortest_path(0, 3), (4.053703927458311, [0, 1, 2, 3]))
 
     def test_tsp(self):
-        assert True
+        a.load_from_json(os.path.join(path, "A0.json"))
+        t = a.TSP([3, 5, 7])
+        self.assertTrue(t[0], [3, 4, 5, 6, 7])
 
     def test_center_point(self):
         a.load_from_json(os.path.join(path, "A0.json"))  # Graph 0

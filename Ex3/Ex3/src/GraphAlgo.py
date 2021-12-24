@@ -10,6 +10,9 @@ from Impl.JsonParser import JsonParser
 
 
 def dfs(graph, start):
+    """
+    performs the dfs algorithm on the given graph starting from node "start"
+    """
     for n in graph.get_all_v().values():
         n.visited = False
     count = 0
@@ -18,6 +21,9 @@ def dfs(graph, start):
 
 
 def dfs_visit(count, n, graph):
+    """
+    visit all the neighbors of node "n" recursively and count all the visits
+    """
     n.visited = True
     count += 1
     if n.id not in graph.edges.keys():
@@ -58,6 +64,9 @@ class GraphAlgo(GraphAlgoInterface):
         return self.graph.nodes[dest].d, nds
 
     def relax(self, u, v, w, q, parents):
+        """
+        helper to sp. the function "relax" from dijkstra algorithm
+        """
         if v.d > u.d + w:
             q.remove((v.d, v))
             v.d = u.d + w
@@ -66,7 +75,7 @@ class GraphAlgo(GraphAlgoInterface):
 
     def sp(self, src, dest=None):
         # sp is used in two ways:
-        # When dest is given it calculates parents dict to find shortest path if available, None otherwise
+        # When dest is given it calculates parents dict to find shortest path if available, None otherwise (dijkstra)
         # If dest is None then the function returns the longest distance between src to any other node.
         if src not in self.graph.nodes.keys():
             return None
@@ -99,19 +108,43 @@ class GraphAlgo(GraphAlgoInterface):
         return self.build_path(src, dest, prvs) if prvs is not None else None
 
     def is_connected(self):
+        # create gTranspose
         gTranspose = DiGraph()
         for n in self.graph.nodes.values():
             gTranspose.add_node(n.id, n.pos)
         for s in self.graph.edges.keys():
             for d in self.graph.edges[s].keys():
                 gTranspose.add_edge(d, s, self.graph.edges[s][d])
+        # check connectivity
         start = list(self.graph.get_all_v().values())[0]
         if dfs(self.graph, start) < self.graph.v_size():
             return False
         return dfs(gTranspose, start) == self.graph.v_size
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
-        pass
+        dist = 0.0
+        ordered_list = []
+        n = node_lst.pop(0)
+        ordered_list.append(n)
+        min_dist = float("inf")
+        closest_neighbor = n
+        closest_list = []  # shortest path list between n and neighbor
+        while len(node_lst) > 0:
+            for neighbor in node_lst:  # for every node left in node_list check if it's the closest one to n
+                curr = self.shortest_path(n, neighbor)
+                if curr[0] < min_dist:
+                    min_dist = curr[0]
+                    closest_neighbor = neighbor
+                    closest_list = curr[1]
+            # after finding the closest neighbor:
+            n = closest_neighbor
+            node_lst.remove(closest_neighbor)
+            # add shortest path list between n and neighbor to the total path list
+            ordered_list.extend(closest_list[1:])
+            # add shortest path dist between n and neighbor to the total path dist
+            dist += min_dist
+            min_dist = float("inf")  # init min dist
+        return ordered_list, dist
 
     def centerPoint(self) -> (int, float):
         if not self.is_connected():
@@ -124,25 +157,6 @@ class GraphAlgo(GraphAlgoInterface):
                 min_dist = d
                 min_n = n
         return min_n, min_dist
-
-        # distances = {}
-        # for n in self.graph.get_all_v():
-        #     distances[n] = 0
-        #     for n2 in self.graph.get_all_v():
-        #         if n == n2:
-        #             continue
-        #         d = self.shortest_path(n, n2)
-        #         if d is None:
-        #             return "The graph is not connected"
-        #         else:
-        #             distances[n] = max(distances[n], d[0])
-        # node = None
-        # dist = float("inf")
-        # for n in distances:
-        #     if distances[n] <= dist:
-        #         node = n
-        #         dist = distances[n]
-        # return node, dist
 
     def plot_graph(self) -> None:
         pass
