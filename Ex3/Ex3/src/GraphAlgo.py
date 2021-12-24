@@ -161,6 +161,6 @@ class GraphAlgo(GraphAlgoInterface):
     def plot_graph(self) -> None:
         pass
 
-    def __init__(self):
-        self.graph = None
+    def __init__(self, g = None):
+        self.graph = g
         self.sort_by = lambda n: n.d
