@@ -3,7 +3,7 @@ import unittest
 from GraphAlgo import GraphAlgo
 
 a = GraphAlgo()
-path = r"/Users/ofirrubin/PycharmProjects/OOP_Ex3/Ex3/Ex3/src/data/"
+path = r"C:/Users/shaha/PycharmProjects/OOP_Ex3/Ex3/Ex3/src/data/"
 
 
 class test_GraphAlgo(unittest.TestCase):
@@ -21,7 +21,7 @@ class test_GraphAlgo(unittest.TestCase):
     def test_shortest_path(self):
         a.load_from_json(os.path.join(path, "A4.json"))
         # Graph 4:
-        # self.assertEquals(a.shortest_path(0, 3), (4.053703927458311, [0, 1, 2, 3]))
+        self.assertEquals(a.shortest_path(0, 3), (4.053703927458311, [0, 1, 2, 3]))
 
     def test_tsp(self):
         assert True
