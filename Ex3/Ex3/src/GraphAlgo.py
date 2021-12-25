@@ -1,5 +1,5 @@
 import json
-from collections import Iterator
+# from collections import Iterator
 from typing import List
 import heapq
 
@@ -90,22 +90,24 @@ class GraphAlgo(GraphAlgoInterface):
         last = None
         while len(q) != 0:
             u = heapq.heappop(q)[1]
+            if u.id == dest:
+                return parents
             for v, w in self.graph.all_out_edges_of_node(u.id).items():
                 node = self.graph.nodes[v]
-                if v not in visited:
-                    node.d = float("inf")
-                    heapq.heappush(q, (self.sort_by(node), node))
-                    visited.append(v)
+                if v not in visited or (node.d, node) in q:
+                    if v not in visited:
+                        node.d = float("inf")
+                        heapq.heappush(q, (self.sort_by(node), node))
+                        visited.append(v)
                     self.relax(u, node, w, q, parents)
                     if dest is None and (last is None or self.graph.nodes[last].d < self.graph.nodes[v].d):
                         last = v
-                    if v == dest:
-                        return parents
+
         return self.graph.nodes[last] if dest is None else None
 
     def shortest_path(self, src, dest):
         prvs = self.sp(src, dest)
-        return self.build_path(src, dest, prvs) if prvs is not None else None
+        return self.build_path(src, dest, prvs) if prvs is not None else (float("inf"), [])
 
     def is_connected(self):
         # create gTranspose

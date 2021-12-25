@@ -18,7 +18,12 @@ class DiGraph(GraphInterface):
 
     def node_parser(self, nodes):
         for n in nodes:
-            self.add_node(n["id"], n["pos"])
+            if "id" not in n:
+                continue
+            if "pos" in n:
+                self.add_node(n["id"], n["pos"])
+            else:
+                self.add_node(n["id"], None)
 
     def edge_parser(self, edges):
         for e in edges:
@@ -94,4 +99,5 @@ class DiGraph(GraphInterface):
         if self.graph.is_edge(id1, id2) is True:
             return self.graph.get_edge(id1, id2)
 
-
+    def __repr__(self):
+        return "|V|=" + str(len(self.nodes)) + " |E|=" + str(self.edge_count)

@@ -7,8 +7,13 @@ class Node:
         self.id = id
         if type(pos) is tuple:
             self.pos = pos
-        else:
+        elif type(pos) is str:
             self.pos = tuple([float(x) for x in pos.split(",")])
+        else:
+            self.pos = ()
 
     def dump(self):
         return {"id": self.id, "pos": ",".join([str(x) for x in self.pos])}
+
+    def __repr__(self):
+        return "id: " + str(self.id) + " pos: " + ",".join([str(x) for x in self.pos])
