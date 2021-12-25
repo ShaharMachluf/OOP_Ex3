@@ -9,33 +9,6 @@ from GraphInterface import GraphInterface
 from Impl.JsonParser import JsonParser
 
 
-def dfs(graph, start):
-    """
-    performs the dfs algorithm on the given graph starting from node "start"
-    """
-    for n in graph.get_all_v().values():
-        n.visited = False
-    count = 0
-    count = dfs_visit(count, start, graph)
-    return count
-
-
-def dfs_visit(count, n, graph):
-    """
-    visit all the neighbors of node "n" recursively and count all the visits
-    """
-    n.visited = True
-    count += 1
-    if n.id not in graph.edges.keys():
-        return count
-    next_e = graph.all_out_edges_of_node(n).items()
-    for next_n in next_e:
-        node = graph.nodes[next_n]
-        if not node.visited:
-            count = dfs_visit(count, node, graph)
-    return count
-
-
 class GraphAlgo(GraphAlgoInterface):
     def load_from_json(self, file_name: str) -> bool:
         try:
@@ -109,19 +82,46 @@ class GraphAlgo(GraphAlgoInterface):
         prvs = self.sp(src, dest)
         return self.build_path(src, dest, prvs) if prvs is not None else (float("inf"), [])
 
+    @staticmethod
+    def dfs(graph, start):
+        """
+        performs the dfs algorithm on the given graph starting from node "start"
+        """
+        for n in graph.get_all_v().values():
+            n.visited = False
+        count = 0
+        count = GraphAlgo.dfs_visit(count, start, graph)
+        return count
+
+    @staticmethod
+    def dfs_visit(count, n, graph):
+        """
+        visit all the neighbors of node "n" recursively and count all the visits
+        """
+        n.visited = True
+        count += 1
+        if n.id not in graph.edges.keys():
+            return count
+        next_e = graph.all_out_edges_of_node(n).items()
+        for next_n in next_e:
+            node = graph.nodes[next_n]
+            if not node.visited:
+                count = GraphAlgo.dfs_visit(count, node, graph)
+        return count
+
     def is_connected(self):
-        # create gTranspose
-        gTranspose = DiGraph()
-        for n in self.graph.nodes.values():
-            gTranspose.add_node(n.id, n.pos)
-        for s in self.graph.edges.keys():
-            for d in self.graph.edges[s].keys():
-                gTranspose.add_edge(d, s, self.graph.edges[s][d])
-        # check connectivity
         start = list(self.graph.get_all_v().values())[0]
-        if dfs(self.graph, start) < self.graph.v_size():
+        if self.dfs(self.graph, start) < self.graph.v_size():
             return False
-        return dfs(gTranspose, start) == self.graph.v_size
+        self.switch_edges_direction()
+        ans = self.dfs(self.graph, start) == self.graph.v_size
+        self.switch_edges_direction()
+        return ans
+
+    def switch_edges_direction(self):
+        out = self.graph.edges
+        self.graph.edges = self.graph.inverse
+        self.graph.edges = out
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         dist = 0.0

@@ -10,6 +10,7 @@ g.add_node(2, (3, 4, 5))
 g.add_edge(1, 0, 3.5)
 g.add_edge(0, 1, 2)
 
+
 class TestDiGraph(unittest.TestCase):
     def test_v_size(self):
         self.assertEquals(g.v_size(), 3)
