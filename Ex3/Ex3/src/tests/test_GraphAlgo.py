@@ -3,7 +3,7 @@ import unittest
 from GraphAlgo import GraphAlgo
 
 a = GraphAlgo()
-path = r"/data"
+path = r"/Users/ofirrubin/PycharmProjects/OOP_Ex3/Ex3/Ex3/src/data"
 
 
 class test_GraphAlgo(unittest.TestCase):

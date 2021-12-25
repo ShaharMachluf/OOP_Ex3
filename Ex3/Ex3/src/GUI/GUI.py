@@ -13,12 +13,14 @@ class Graphics:
         self.w = width
         self.h = height
         self.graph = graph
+        self.bgColor = bgColor
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
-        self.screen.fill(bgColor)
 
     def display(self):
-        pygame.display.update()
+        while True:
+            self.screen.fill(self.bgColor)
+            pygame.display.update()
 
 
 g = Graphics(100, 100, Graphics.WHITE, None)
