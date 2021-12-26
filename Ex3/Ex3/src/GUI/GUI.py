@@ -7,7 +7,7 @@ import pygame
 from DiGraph import DiGraph
 from Impl.Node import Node
 
-
+# Also need to split the files
 class Padding:
     # Simple graph to save padding data and working area screen
     def __init__(self, left, top, right, bottom):
