@@ -1,5 +1,8 @@
 import os
 import unittest
+
+from DiGraph import DiGraph
+from GUI.GUI import Graphics, Padding, GraphicsConfig
 from GraphAlgo import GraphAlgo
 
 a = GraphAlgo()
@@ -34,4 +37,11 @@ class test_GraphAlgo(unittest.TestCase):
         self.assertTrue(p, 7)
 
     def test_plot_graph(self):
+        a.load_from_json(os.path.join(path, "A1.json"))
+        # graph = a.graph
+        import graph_generator
+        graph = graph_generator.get_graph(1000)
+        g = Graphics(Padding(20, 20, 20, 20), GraphicsConfig(), graph)
+        g.display()
         assert True
+

@@ -1,3 +1,5 @@
+import math
+
 
 class Node:
     def __init__(self, id, pos):
@@ -11,6 +13,9 @@ class Node:
             self.pos = tuple([float(x) for x in pos.split(",")])
         else:
             self.pos = ()
+
+    def distance(self, n):
+        return math.sqrt(math.pow(self.pos[0] - n.pos[0], 2) + math.pow(self.pos[1] - n.pos[1], 2))
 
     def dump(self):
         return {"id": self.id, "pos": ",".join([str(x) for x in self.pos])}
