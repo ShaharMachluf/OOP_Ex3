@@ -3,9 +3,7 @@ from Impl.Node import Node
 
 
 class DiGraph(GraphInterface):
-   # dict [src] => dict<dest, edge>
-   # dict [dest] => dict<src, edge> src =1 => dict<5, edge>,6,9] | dest =9 [1,2]
-    def __init__(self, Nodes = None, Edges = None):
+    def __init__(self, Nodes=None, Edges=None):
         self.nodes = {}
         self.edges = {}  # dict[src] of (dict[dest] of edges)
         self.inverse = {}  # dict[dest] of (dict[src] of None)
@@ -96,8 +94,8 @@ class DiGraph(GraphInterface):
         return self.edges[id1][id2]
 
     def get_weight(self, id1: int, id2: int) -> (float, list):
-        if self.graph.is_edge(id1, id2) is True:
-            return self.graph.get_edge(id1, id2)
+        if self.is_edge(id1, id2) is True:
+            return self.get_edge(id1, id2), [id1, id2]
 
     def __repr__(self):
         return "|V|=" + str(len(self.nodes)) + " |E|=" + str(self.edge_count)

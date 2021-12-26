@@ -1,9 +1,8 @@
+import heapq
 import json
 # from collections import Iterator
 from typing import List
-import heapq
 
-from DiGraph import DiGraph
 from GraphAlgoInterface import GraphAlgoInterface
 from GraphInterface import GraphInterface
 from Impl.JsonParser import JsonParser
@@ -163,6 +162,6 @@ class GraphAlgo(GraphAlgoInterface):
     def plot_graph(self) -> None:
         pass
 
-    def __init__(self, g = None):
+    def __init__(self, g=None):
         self.graph = g
         self.sort_by = lambda n: n.d

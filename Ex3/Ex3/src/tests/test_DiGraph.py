@@ -1,7 +1,6 @@
 import unittest
 
 from Ex3.Ex3.src.DiGraph import DiGraph
-from Ex3.Ex3.src.Impl.Node import Node
 
 g = DiGraph()
 

@@ -1,9 +1,8 @@
 import os
 import unittest
 
-from DiGraph import DiGraph
-from GUI.GUI import Graphics, Padding, GraphicsConfig
 from GraphAlgo import GraphAlgo
+from Impl import GUI, Padding, GraphicsConfig
 
 a = GraphAlgo()
 path = r"/Users/ofirrubin/PycharmProjects/OOP_Ex3/Ex3/Ex3/src/data"
@@ -41,7 +40,7 @@ class test_GraphAlgo(unittest.TestCase):
         # graph = a.graph
         import graph_generator
         graph = graph_generator.get_graph(1000)
-        g = Graphics(Padding(20, 20, 20, 20), GraphicsConfig(), graph)
+        g = GUI.Graphics(Padding.Padding(20, 20, 20, 20), GraphicsConfig.GraphicsConfig(), graph)
         g.display()
         assert True
 

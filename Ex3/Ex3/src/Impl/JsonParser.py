@@ -1,7 +1,8 @@
 import json
-import os
 
 from DiGraph import DiGraph
+
+
 # from Node import Node
 
 
@@ -13,7 +14,8 @@ class JsonParser:
         parsed = {"Nodes": [], "Edges": []}
         for v in graph.get_all_v().values():
             parsed["Nodes"].append(v.dump())
-            parsed["Edges"].append([{"dest": v.id, "src": k, "w": w} for k, w in graph.all_in_edges_of_node(v.id).items()])
+            parsed["Edges"].append(
+                [{"dest": v.id, "src": k, "w": w} for k, w in graph.all_in_edges_of_node(v.id).items()])
         with open(self.filename, "w+") as f:
             f.write(json.dumps(parsed, indent=4, sort_keys=True))
 

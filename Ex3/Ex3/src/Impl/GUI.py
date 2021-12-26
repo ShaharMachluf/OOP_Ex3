@@ -6,27 +6,7 @@ import pygame
 
 from DiGraph import DiGraph
 from Impl.Node import Node
-
-# Also need to split the files
-class Padding:
-    # Simple graph to save padding data and working area screen
-    def __init__(self, left, top, right, bottom):
-        self.left = left
-        self.top = top
-        self.right = right
-        self.bottom = bottom
-
-    def get_width(self, width):
-        return width - (self.left + self.right)
-
-    def get_height(self, height):
-        return height - (self.top + self.bottom)
-
-    def get_top(self):
-        return self.top
-
-    def get_right(self):
-        return self.right
+from Impl.Padding import Padding
 
 
 class Graphics:
@@ -174,8 +154,10 @@ class Graphics:
             self.draw_node(n)
 
     def draw_node(self, n):
-        # The radius of each node is now determined by the density of the graph
-        radius = ((self.w * self.h) / (self.graph.e_size())) / 256  #min(self.w, self.h) / 150
+        # The radius of each node is now determined by the density of the graph,
+        # added 1 so it won't divide by 0 if none.
+        # good ratio too: min(self.w, self.h) / 150
+        radius = ((self.w * self.h) / (self.graph.e_size() + 1)) / self.config.radius_dens
         pygame.draw.circle(self.screen,
                            self.config.node_selected if n.id in self.selected_nodes else self.config.node_normal,
                            n.pos[:2], radius)
@@ -186,21 +168,21 @@ class Graphics:
         self.draw_arrow_head(n1, n2, color)
 
     def draw_arrow_head(self, src, dest, color):
-        len = src.distance(dest)
-        if len == 0:
+        leng = src.distance(dest)
+        if leng == 0:
             return
-        arw_len = len / 16
-        scale = arw_len / len
-        angle = 65
-        pos_ratio = 0.7
+        arw_len = leng / self.config.arrow_scale
+        scale = arw_len / leng
+        angle = self.config.arrow_angle
+        pos_ratio = self.config.arrow_pos
         head = (src.pos[0] + pos_ratio * (dest.pos[0] - src.pos[0]),
                 src.pos[1] + pos_ratio * (dest.pos[1] - src.pos[1]))
-        dX = src.pos[0] - head[0]
-        dY = src.pos[1] - head[1]
-        sinA = math.sin(angle)
-        cosA = math.cos(angle)
-        g1 = (head[0] - scale * (dX * cosA + dY * sinA), head[1] - scale * (dY * cosA - dX * sinA))
-        g2 = (head[0] - scale * (dX * cosA - dY * sinA), head[1] - scale * (dY * cosA + dX * sinA))
+        d_x = src.pos[0] - head[0]
+        d_y = src.pos[1] - head[1]
+        sin_a = math.sin(angle)
+        cos_a = math.cos(angle)
+        g1 = (head[0] - scale * (d_x * cos_a + d_y * sin_a), head[1] - scale * (d_y * cos_a - d_x * sin_a))
+        g2 = (head[0] - scale * (d_x * cos_a - d_y * sin_a), head[1] - scale * (d_y * cos_a + d_x * sin_a))
         pygame.draw.line(self.screen, color, g1, head)
         pygame.draw.line(self.screen, color, g2, head)
 
@@ -223,18 +205,3 @@ class Graphics:
         if (n1, n2) in self.selected_edges:
             self.selected_edges.remove((n1, n2))
         pygame.event.post(pygame.event.Event(self.ui_event, message="Edge removed"))
-
-
-class GraphicsConfig:
-    # Simple class to configure the graph settings
-    BLACK = (0, 0, 0)
-    WHITE = (255, 255, 255)
-    RED = (255, 0, 0)
-    GREEN = (0, 255, 0)
-    BLUE = (0, 0, 255)
-
-    node_normal = BLUE
-    node_selected = GREEN
-    path_normal = BLACK
-    path_selected = RED
-    bg_color = WHITE
