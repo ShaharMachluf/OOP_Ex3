@@ -8,7 +8,7 @@ a = GraphAlgo()
 path = r"/Users/ofirrubin/PycharmProjects/OOP_Ex3/Ex3/Ex3/src/data"
 
 
-class test_GraphAlgo(unittest.TestCase):
+class TestGraphAlgo(unittest.TestCase):
 
     def test_load_from_json(self):
         self.assertTrue(a.load_from_json(os.path.join(path, "A0.json")))
