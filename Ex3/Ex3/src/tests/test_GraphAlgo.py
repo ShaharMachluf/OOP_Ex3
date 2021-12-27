@@ -2,7 +2,7 @@ import os
 import unittest
 
 from GraphAlgo import GraphAlgo
-from Impl import GUI, Padding, GraphicsConfig
+from Impl import GUI, GraphicsConfig
 
 a = GraphAlgo()
 path = r"/Users/ofirrubin/PycharmProjects/OOP_Ex3/Ex3/Ex3/src/data"
@@ -39,8 +39,8 @@ class test_GraphAlgo(unittest.TestCase):
         a.load_from_json(os.path.join(path, "A1.json"))
         # graph = a.graph
         import graph_generator
-        graph = graph_generator.get_graph(1000)
-        g = GUI.Graphics(Padding.Padding(20, 20, 20, 20), GraphicsConfig.GraphicsConfig(), graph)
+        graph = graph_generator.get_graph(100)
+        g = GUI.Graphics(GraphicsConfig.GraphicsConfig(), graph)
         g.display()
         assert True
 

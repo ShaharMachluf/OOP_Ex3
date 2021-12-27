@@ -5,6 +5,8 @@ from typing import List
 
 from GraphAlgoInterface import GraphAlgoInterface
 from GraphInterface import GraphInterface
+from Impl import GUI
+from Impl.GraphicsConfig import GraphicsConfig
 from Impl.JsonParser import JsonParser
 
 
@@ -160,7 +162,9 @@ class GraphAlgo(GraphAlgoInterface):
         return min_n, min_dist
 
     def plot_graph(self) -> None:
-        pass
+        if self.graph is not None:
+            gui = GUI.Graphics(GraphicsConfig(), self.graph)
+            gui.display()
 
     def __init__(self, g=None):
         self.graph = g

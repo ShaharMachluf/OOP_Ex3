@@ -11,8 +11,9 @@ from Impl.Padding import Padding
 
 class Graphics:
     DEFAULT_SIZE = 500
+    DEFAULT_PADDING = Padding(20, 20, 20, 20)
 
-    def __init__(self, padding: Padding, config, graph):
+    def __init__(self, config, graph, padding: Padding = None):
         pygame.init()
 
         self.ui_event = pygame.USEREVENT + 1
@@ -20,7 +21,6 @@ class Graphics:
         # Screen size & settings
         self.w = self.DEFAULT_SIZE
         self.h = self.DEFAULT_SIZE
-        self.radius = 10
         self.set_working_area()
         self.screen = pygame.display.set_mode((self.w, self.h), pygame.RESIZABLE)
         pygame.display.set_caption("Graph")
@@ -29,7 +29,7 @@ class Graphics:
 
         # Graph variables:
         self.graph = graph if graph is not None else DiGraph()
-        self.padding = padding
+        self.padding = padding if padding is not None else self.DEFAULT_PADDING
         self.config = config
         self.no_pos = {}
         self.selected_nodes = []
@@ -85,14 +85,8 @@ class Graphics:
     def set_scale(self):
         w = self.padding.get_width(self.w)
         h = self.padding.get_height(self.h)
-        if self.xD <= 1:  # Because it's smaller than one than the aspect is done the other way
-            self.xS = w / self.xD if self.xD < w else self.xD / w
-        else:
-            self.xS = w / self.xD if self.xD > w else self.xD / w
-        if self.yD <= 1:
-            self.yS = h / self.yD if self.yD < h else self.yD / h
-        else:
-            self.yS = h / self.yD if self.yD > h else self.yD / h
+        self.xS = w / self.xD
+        self.yS = h / self.yD
 
     def set_working_area(self):
         di = pygame.display.Info()  # display info
@@ -110,13 +104,13 @@ class Graphics:
                 # We re-render on window size changed
                 self.w = self.screen.get_width()
                 self.h = self.screen.get_height()
-                self.radius = min(self.w, self.h) / 80
                 self.screen.fill(self.config.bg_color)
                 self.draw_all()
                 pygame.display.update()
 
             elif event.type == self.ui_event:
                 # We re-render when we add or change something in the graph.
+                self.screen.fill(self.config.bg_color)
                 self.draw_all()
                 pygame.display.update()
 
@@ -158,6 +152,7 @@ class Graphics:
         # added 1 so it won't divide by 0 if none.
         # good ratio too: min(self.w, self.h) / 150
         radius = ((self.w * self.h) / (self.graph.e_size() + 1)) / self.config.radius_dens
+        radius = min(radius, 10)
         pygame.draw.circle(self.screen,
                            self.config.node_selected if n.id in self.selected_nodes else self.config.node_normal,
                            n.pos[:2], radius)
